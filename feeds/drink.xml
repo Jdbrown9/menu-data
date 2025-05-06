@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<rss version="2.0">
+  <channel>
+    <title>Drink Price</title>
+    <item>
+      <title>Drink</title>
+      <description>10.75</description>
+    </item>
+  </channel>
+</rss>
