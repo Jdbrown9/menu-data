@@ -13,23 +13,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          ref: main  # <- this ensures commits happen on main branch
+          ref: main
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Run feed generator
+      - name: Run feed generator script
         run: |
           python generate_feeds.py
 
-      - name: Show feed output
+      - name: Debug: List feed files
         run: |
-          echo "Checking feeds:"
+          echo "Listing contents of /feeds:"
           ls -R feeds || echo "feeds folder not found"
 
-      - name: Commit and push generated feeds
+      - name: Commit generated RSS feeds
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
@@ -40,6 +40,9 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "Auto-update RSS feeds from menu.csv"
-            git pull --rebase origin main
-            git push origin main
           fi
+
+      - name: Pull and push to main
+        run: |
+          git pull --rebase origin main || echo "Nothing to pull"
+          git push origin main
