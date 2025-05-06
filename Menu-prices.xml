@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Menu Prices</title>
+
+    <item>
+      <title>burger</title>
+      <description>6.49</description>
+    </item>
+    <item>
+      <title>fries</title>
+      <description>2.99</description>
+    </item>
+    <item>
+      <title>drink</title>
+      <description>1.75</description>
+    </item>
+
+  </channel>
+</rss>
