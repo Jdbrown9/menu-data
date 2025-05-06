@@ -10,17 +10,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-      - name: Generate RSS feeds
+
+      - name: Run feed generator script
+        run: python generate_feeds.py
+
+      - name: Debug: List feed files
+        run: |
+          echo "Listing contents of /feeds:"
+          ls -R feeds || echo "No feeds folder found"
+
+      - name: Commit and push RSS
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          
+
           git add feeds/*.xml || echo "No XML files to add"
-          
+
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
