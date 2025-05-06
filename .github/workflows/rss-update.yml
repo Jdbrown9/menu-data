@@ -23,7 +23,14 @@ jobs:
       - name: Run feed generator script
         run: |
           python generate_feeds.py
-        
+
+      - name: Debug: Show output from feeds folder
+        run: |
+          echo "Contents of working directory:"
+          ls -R
+          echo ""
+          echo "Contents of feeds folder:"
+          ls -R feeds || echo "feeds folder not found"
 
       - name: Commit generated RSS feeds
         run: |
@@ -34,7 +41,8 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "Auto-update RSS feeds from menu.csv"
-      
+          fi
+
       - name: Pull and push to main
         run: |
           git pull --rebase origin main || echo "Nothing to pull"
