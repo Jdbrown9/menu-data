@@ -40,5 +40,6 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "Auto-update RSS feeds from menu.csv"
+            git pull --rebase origin main
             git push origin main
           fi
