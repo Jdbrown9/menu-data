@@ -10,7 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: main  # <- this ensures commits happen on main branch
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -37,5 +40,5 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "Auto-update RSS feeds from menu.csv"
-            git push
+            git push origin main
           fi
