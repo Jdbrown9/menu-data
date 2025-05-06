@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -23,7 +24,7 @@ jobs:
         run: |
           python generate_feeds.py
 
-      - name: Debug: Show output from feeds folder
+      - name: Debug:Show output from feeds folder
         run: |
           echo "Contents of working directory:"
           ls -R
