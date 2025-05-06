@@ -33,15 +33,12 @@ jobs:
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-
           git add feeds/*.xml || echo "No XML files to add"
-
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
             git commit -m "Auto-update RSS feeds from menu.csv"
-          fi
-
+      
       - name: Pull and push to main
         run: |
           git pull --rebase origin main || echo "Nothing to pull"
