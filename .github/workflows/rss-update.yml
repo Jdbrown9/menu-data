@@ -17,7 +17,8 @@ jobs:
           python-version: '3.x'
 
       - name: Run feed generator script
-        run: python generate_feeds.py
+        run: |
+          python generate_feeds.py
 
       - name: Debug: List feed files
         run: |
