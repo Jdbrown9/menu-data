@@ -1,5 +1,14 @@
-{
-  "burger": "6.49",
-  "fries": "2.99",
-  "drink": "1.75"
-}
+[
+  {
+    "title": "burger",
+    "text": "6.49"
+  },
+  {
+    "title": "fries",
+    "text": "2.99"
+  },
+  {
+    "title": "drink",
+    "text": "1.75"
+  }
+]
