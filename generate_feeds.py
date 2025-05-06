@@ -3,7 +3,9 @@ import os
 from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom.minidom import parseString
 
-# Make sure feeds folder exists
+print("Starting RSS feed generation...")
+
+# Ensure feeds directory exists
 os.makedirs("feeds", exist_ok=True)
 
 with open("menu.csv", newline='') as f:
@@ -11,8 +13,12 @@ with open("menu.csv", newline='') as f:
     for row in reader:
         item = row.get("item", "").strip().lower()
         price = row.get("price", "").strip()
+
         if not item or not price:
-            continue  # Skip empty rows
+            print(f"Skipping invalid row: {row}")
+            continue
+
+        print(f"Generating RSS for: {item} (${price})")
 
         rss = Element("rss", version="2.0")
         channel = SubElement(rss, "channel")
@@ -27,5 +33,8 @@ with open("menu.csv", newline='') as f:
         desc.text = price
 
         xml_str = parseString(tostring(rss)).toprettyxml(indent="  ")
-        with open(f"feeds/{item}.xml", "w") as out:
+        path = f"feeds/{item}.xml"
+        with open(path, "w") as out:
             out.write(xml_str)
+
+print("RSS generation complete.")
