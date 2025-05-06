@@ -23,11 +23,7 @@ jobs:
       - name: Run feed generator script
         run: |
           python generate_feeds.py
-
-      - name: Debug: List feed files
-        run: |
-          echo "Listing contents of /feeds:"
-          ls -R feeds || echo "feeds folder not found"
+        
 
       - name: Commit generated RSS feeds
         run: |
