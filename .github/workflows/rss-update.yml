@@ -1,4 +1,4 @@
-name: Update RSS Feeds from Menu Update CSV
+name: Update RSS feeds from Menu Update CSV
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 jobs:
   update-feeds:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -15,29 +16,34 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.10'
 
       - name: Replace old menu.csv with Menu Update.csv
         run: |
           if [ -f "menu.csv" ]; then
             rm menu.csv
           fi
-          mv "Menu Update.csv" menu.csv
+
+          if [ -f "Menu Update.csv" ]; then
+            mv "Menu Update.csv" menu.csv
+          else
+            echo "Error: 'Menu Update.csv' not found."
+            exit 1
+          fi
 
       - name: Run feed generator script
         run: python generate_feeds.py
 
-      - name: Commit and push changes
+      - name: Commit and push RSS feeds
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
 
-          git add menu.csv feeds/*.xml || echo "No files to add"
+          git add feeds/*.xml menu.csv
 
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git pull --rebase
-            git commit -m "Auto-update RSS feeds from Menu Update"
+            git commit -m "Auto-update RSS feeds from CSV"
             git push
           fi
