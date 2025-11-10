@@ -22,25 +22,24 @@ jobs:
           if [ -f "Menu Update.csv" ]; then
             rm -f menu.csv
             mv "Menu Update.csv" menu.csv
-            echo "CSV file renamed to menu.csv"
+            echo "Renamed to menu.csv"
           else
             echo "Menu Update.csv not found"
             exit 1
           fi
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: pip install feedgen
 
       - name: Run feed generator script
-        run: |
-          python generate_feeds.py
+        run: python generate_feeds.py
 
       - name: Debug: Show contents of feeds folder
         run: |
           echo "Feeds folder contents:"
           ls -l feeds || echo "No feeds folder found"
 
-      - name: Commit and push changes
+      - name: Commit and push updates
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
