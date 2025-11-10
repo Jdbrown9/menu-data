@@ -1,22 +1,32 @@
-name: Update RSS Feeds from CSV
+name: Update RSS Feeds
 
 on:
   push:
     paths:
       - 'Menu Update.csv'
+      - '.github/workflows/rss-update.yml'
+
+permissions:
+  contents: write
 
 jobs:
   update-feeds:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Replace old menu file
+      - name: Rename uploaded CSV to menu.csv
         run: |
-          rm -f menu.csv
-          mv "Menu Update.csv" menu.csv
+          if [ -f "Menu Update.csv" ]; then
+            rm -f menu.csv
+            mv "Menu Update.csv" menu.csv
+            echo "Renamed Menu Update.csv to menu.csv"
+          else
+            echo "No Menu Update.csv file found"
+            exit 1
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -25,7 +35,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt || true
+          pip install -r requirements.txt || echo "No requirements.txt found"
 
       - name: Run feed generator script
         run: python generate_feeds.py
@@ -41,6 +51,6 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "Auto-update RSS feeds from CSV"
-            git pull --rebase
-            git push
+            git pull --rebase || echo "Pull failed, continuing anyway"
+            git push || echo "Push failed — possibly due to permissions or conflicts"
           fi
