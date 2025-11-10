@@ -3,47 +3,51 @@ name: Update RSS Feeds from CSV
 on:
   push:
     paths:
-      - 'menu.csv'
+      - 'Menu Update.csv'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          ref: main
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
+      - name: Rename uploaded CSV to menu.csv
+        run: |
+          if [ -f "Menu Update.csv" ]; then
+            rm -f menu.csv
+            mv "Menu Update.csv" menu.csv
+            echo "CSV file renamed."
+          else
+            echo "Menu Update.csv not found."
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: pip install feedgen
+
       - name: Run feed generator script
-        run: |
-          python generate_feeds.py
+        run: python generate_feeds.py
 
-      - name: Debug:Show output from feeds folder
-        run: |
-          echo "Contents of working directory:"
-          ls -R
-          echo ""
-          echo "Contents of feeds folder:"
-          ls -R feeds || echo "feeds folder not found"
+      - name: Debug: List feed files
+        run: ls -R feeds
 
-      - name: Commit generated RSS feeds
+      - name: Commit and push updated feeds
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          git add feeds/*.xml || echo "No XML files to add"
+
+          git add menu.csv feeds/*.xml || echo "No files to add"
+
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Auto-update RSS feeds from menu.csv"
+            git commit -m "Auto-update RSS feeds from Menu Update.csv"
+            git pull --rebase
+            git push
           fi
-
-      - name: Pull and push to main
-        run: |
-          git pull --rebase origin main || echo "Nothing to pull"
-          git push origin main
